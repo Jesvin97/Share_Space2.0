@@ -10,8 +10,10 @@
 
 .nav-scrolled {
   padding: 1rem 0;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(10, 10, 10, 0.85); /* Deep black glass */
   border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .navbar {

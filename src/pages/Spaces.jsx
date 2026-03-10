@@ -17,21 +17,29 @@ const spacesData = [
 ];
 
 const Spaces = () => {
-  const [isSignedIn, setIsSignedIn] = useState(false); // Mock user state
+  const isSignedIn = localStorage.getItem('isAuthenticated') === 'true';
 
   return (
     <div className="page-wrapper">
       <PageHeader title="Discover Spaces" subtitle="Find the perfect studios and event venues across South India for your next creative project." />
       
-      <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'rgba(255, 215, 0, 0.1)', borderBottom: '1px solid var(--primary)', color: 'var(--text-main)' }}>
-        <p style={{ display: 'inline-block', marginRight: '1rem', fontSize: '0.9rem' }}>
-          <Lock size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
-          Viewing as Guest. Sign in to unlock host phone numbers and direct messaging.
-        </p>
-        <Link to="/signin" className="btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem', textDecoration: 'none', display: 'inline-block' }}>
-          Sign In Now
-        </Link>
-      </div>
+      {isSignedIn ? (
+        <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'rgba(0, 200, 83, 0.1)', borderBottom: '1px solid #00c853', color: 'var(--text-main)' }}>
+          <p style={{ display: 'inline-block', margin: 0, fontSize: '0.9rem', fontWeight: '500' }}>
+            Welcome back, Admin. You have full access to host contact details.
+          </p>
+        </div>
+      ) : (
+        <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: 'rgba(255, 215, 0, 0.1)', borderBottom: '1px solid var(--primary)', color: 'var(--text-main)' }}>
+          <p style={{ display: 'inline-block', marginRight: '1rem', fontSize: '0.9rem' }}>
+            <Lock size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+            Viewing as Guest. Sign in to unlock host phone numbers and direct messaging.
+          </p>
+          <Link to="/signin" className="btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem', textDecoration: 'none', display: 'inline-block' }}>
+            Sign In Now
+          </Link>
+        </div>
+      )}
 
       <section className="section">
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Star } from 'lucide-react';
 import './Testimonials.css';
 
@@ -27,27 +27,47 @@ const testimonials = [
 const Testimonials = () => {
   return (
     <section className="section testimonials-section" id="about">
+      {/* Diorama layered noise/texture specific to this section */}
+      <div className="diorama-bg-layer"></div>
+      
       <div className="container">
-        <h2 className="section-title">Our Users Feedback</h2>
-        <p className="section-subtitle">What Our Users Love About Us</p>
+        <motion.div
+           initial={{ opacity: 0, z: -100 }}
+           whileInView={{ opacity: 1, z: 0 }}
+           viewport={{ once: true, margin: "-100px" }}
+           transition={{ duration: 0.8 }}
+           style={{ transformStyle: "preserve-3d" }}
+        >
+          <h2 className="section-title" style={{ textShadow: '0 10px 30px rgba(0,0,0,0.8)' }}>Our Users Feedback</h2>
+          <p className="section-subtitle">What Our Community Loves About Us</p>
+        </motion.div>
         
         <div className="testimonials-grid">
           {testimonials.map((t, index) => (
             <motion.div 
               key={index}
               className="testimonial-card glass"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15, duration: 0.5 }}
+              /* Organic Diorma entrance: cards float in from deep Z, slightly rotated */
+              initial={{ opacity: 0, scale: 0.85, rotateZ: index % 2 === 0 ? -2 : 2, z: -150, y: 50 }}
+              whileInView={{ opacity: 1, scale: 1, rotateZ: 0, z: 0, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: index * 0.2, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ 
+                y: -10, 
+                z: 40,
+                rotateX: 5,
+                rotateY: index % 2 === 0 ? 3 : -3,
+                boxShadow: "0 30px 60px -20px rgba(0,0,0,1)"
+              }}
             >
-              <div className="stars">
+              <div className="stars" style={{ transform: "translateZ(20px)" }}>
                 {[...Array(t.rating)].map((_, i) => (
-                  <Star key={i} size={18} fill="var(--primary)" color="var(--primary)" />
+                  <Star key={i} size={16} fill="var(--primary)" color="var(--primary)" />
                 ))}
               </div>
-              <p className="testimonial-text">"{t.text}"</p>
-              <div className="testimonial-author">
+              <p className="testimonial-text" style={{ transform: "translateZ(30px)" }}>"{t.text}"</p>
+              
+              <div className="testimonial-author" style={{ transform: "translateZ(40px)" }}>
                 <div className="author-avatar">{t.name.charAt(0)}</div>
                 <div>
                   <h4>{t.name}</h4>

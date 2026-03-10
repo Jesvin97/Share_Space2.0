@@ -8,6 +8,12 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+
+  const handleSignOut = () => {
+    localStorage.removeItem('isAuthenticated');
+    window.location.href = '/';
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +39,11 @@ const Navbar = () => {
 
         <div className="navbar-actions desktop-only">
           <button className="btn-outline" onClick={() => navigate('/list-space')}>List your space</button>
-          <button className="btn-primary" onClick={() => navigate('/signin')}>Sign In</button>
+          {isAuthenticated ? (
+            <button className="btn-primary" onClick={handleSignOut}>Sign Out</button>
+          ) : (
+            <button className="btn-primary" onClick={() => navigate('/signin')}>Sign In</button>
+          )}
         </div>
 
         <button 
@@ -59,7 +69,11 @@ const Navbar = () => {
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
             <div className="mobile-actions">
               <button className="btn-outline" onClick={() => { navigate('/list-space'); setMobileMenuOpen(false); }}>List your space</button>
-              <button className="btn-primary" onClick={() => { navigate('/signin'); setMobileMenuOpen(false); }}>Sign In</button>
+              {isAuthenticated ? (
+                <button className="btn-primary" onClick={() => { handleSignOut(); setMobileMenuOpen(false); }}>Sign Out</button>
+              ) : (
+                <button className="btn-primary" onClick={() => { navigate('/signin'); setMobileMenuOpen(false); }}>Sign In</button>
+              )}
             </div>
           </motion.div>
         )}
