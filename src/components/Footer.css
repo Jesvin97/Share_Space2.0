@@ -1,7 +1,8 @@
 .footer {
-  background-color: var(--text-main);
-  color: white;
+  background-color: #050505; /* Black background */
+  color: var(--text-main);
   padding: 5rem 0 2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
 }
 
 .footer-content {
@@ -12,7 +13,7 @@
 }
 
 .footer-brand p {
-  color: #9CA3AF;
+  color: var(--text-muted);
   line-height: 1.6;
   margin: 1.5rem 0;
   max-width: 300px;
@@ -24,6 +25,7 @@
   gap: 0.5rem;
   font-size: 1.5rem;
   font-weight: 700;
+  color: var(--text-main);
 }
 
 .social-links {
@@ -38,14 +40,17 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(212, 175, 55, 0.2);
   transition: var(--transition);
 }
 
 .social-links a:hover {
   background: var(--primary);
-  color: var(--text-main);
+  color: var(--bg-color);
   transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
 }
 
 .footer-links {
@@ -57,18 +62,24 @@
 .link-group h4 {
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: white;
+  color: var(--text-main);
 }
 
 .link-group a {
-  display: block;
-  color: #9CA3AF;
+  display: block; /* Stack links vertically */
+  color: var(--primary);
   margin-bottom: 0.75rem;
   transition: var(--transition);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .link-group a:hover {
-  color: var(--primary);
+  color: var(--primary-hover);
+  transform: translateX(5px);
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
 .footer-bottom {

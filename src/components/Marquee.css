@@ -1,0 +1,68 @@
+/* 
+ * MARQUEE — Drinksom-style infinite scrolling strip
+ * Technique: Two rows of text animated with CSS translateX keyframes.
+ * Reversed direction on second row for cinematic depth illusion.
+ */
+
+.marquee-section {
+  width: 100%;
+  overflow: hidden;
+  padding: 3rem 0;
+  background: var(--surface);
+  border-top: 1px solid rgba(212, 175, 55, 0.08);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+  position: relative;
+  /* Soft edge fade vignette on sides */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  will-change: transform;
+  width: max-content;
+  margin-bottom: 1.2rem;
+}
+
+/* Row scrolling LEFT */
+@keyframes scrollLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Row scrolling RIGHT */
+@keyframes scrollRight {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.marquee-left {
+  animation: scrollLeft var(--speed, 40s) linear infinite;
+}
+
+.marquee-right {
+  animation: scrollRight var(--speed, 50s) linear infinite;
+}
+
+/* Pause on hover for polish */
+.marquee-section:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 2rem;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+/* Starred separators glow gold */
+.marquee-item:nth-child(even) {
+  color: var(--primary);
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+  font-size: 0.9em;
+}
