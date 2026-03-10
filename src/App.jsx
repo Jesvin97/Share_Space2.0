@@ -10,6 +10,7 @@ import TrustSafety from './pages/TrustSafety';
 import Contact from './pages/Contact';
 import ListSpace from './pages/ListSpace';
 import SignIn from './pages/SignIn';
+import Spaces from './pages/Spaces';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/spaces" element={<Spaces />} />
           <Route path="/about" element={<About />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/help" element={<HelpCenter />} />

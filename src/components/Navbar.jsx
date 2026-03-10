@@ -18,7 +18,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header className={`navbar-container ${scrolled ? 'nav-scrolled glass' : ''}`}>
+    <header className="navbar-container nav-scrolled glass">
       <div className="container navbar">
         <Link to="/" className="navbar-logo">
           <Rocket className="logo-icon" size={28} color="var(--primary)" />
@@ -26,7 +26,7 @@ const Navbar = () => {
         </Link>
         
         <nav className="navbar-links desktop-only">
-          <Link to="/">Spaces</Link>
+          <Link to="/spaces">Spaces</Link>
           <Link to="/about">About Us</Link>
           <Link to="/contact">Contact</Link>
         </nav>
@@ -54,7 +54,7 @@ const Navbar = () => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <Link to="/" onClick={() => setMobileMenuOpen(false)}>Spaces</Link>
+            <Link to="/spaces" onClick={() => setMobileMenuOpen(false)}>Spaces</Link>
             <Link to="/about" onClick={() => setMobileMenuOpen(false)}>About Us</Link>
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
             <div className="mobile-actions">
