@@ -33,7 +33,7 @@ const Navbar = () => {
         
         <nav className="navbar-links desktop-only">
           <Link to="/spaces">Spaces</Link>
-          <a href="/#story">About Us</a>
+          <Link to="/careers">Careers</Link>
           <Link to="/contact">Contact</Link>
         </nav>
 
@@ -65,7 +65,7 @@ const Navbar = () => {
             transition={{ duration: 0.3 }}
           >
             <Link to="/spaces" onClick={() => setMobileMenuOpen(false)}>Spaces</Link>
-            <a href="/#story" onClick={() => setMobileMenuOpen(false)}>About Us</a>
+            <Link to="/careers" onClick={() => setMobileMenuOpen(false)}>Careers</Link>
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
             <div className="mobile-actions">
               <button className="btn-outline" onClick={() => { navigate('/list-space'); setMobileMenuOpen(false); }}>List your space</button>
