@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageHeader from '../components/PageHeader';
 import { MapPin, Phone, Lock, SlidersHorizontal, X, Plus, Trash2, ShieldCheck } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 /* ─── Default seed data ─── */
 const DEFAULT_SPACES = [
@@ -48,21 +49,19 @@ const Pill = ({ active, onClick, children }) => (
 const EMPTY_FORM = { name: '', location: 'Bangalore', type: 'Studio', price: '', phone: '', img: '' };
 
 const Spaces = () => {
-  const isSignedIn = localStorage.getItem('isAuthenticated') === 'true';
-  const isAdmin    = localStorage.getItem('userEmail') === 'admin@shrshape.com';
+  const { isAuthenticated: isSignedIn, isAdmin } = useAuth();
+  const [fetchError, setFetchError] = useState(false);
 
-  /* Listings: load from localStorage, seed with defaults if first visit */
-  const [spaces, setSpaces] = useState(() => {
-    try {
-      const saved = localStorage.getItem('spaceListings');
-      return saved ? JSON.parse(saved) : DEFAULT_SPACES;
-    } catch { return DEFAULT_SPACES; }
-  });
+  /* Listings: fetched from API, falls back to DEFAULT_SPACES */
+  const [spaces, setSpaces] = useState(DEFAULT_SPACES);
 
-  /* Persist whenever spaces change */
   useEffect(() => {
-    localStorage.setItem('spaceListings', JSON.stringify(spaces));
-  }, [spaces]);
+    fetch('/api/spaces', { credentials: 'include' })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data) setSpaces(data); })
+      .catch(() => setFetchError(true));
+  }, []);
+
 
   /* Filters */
   const [filterLocation, setFilterLocation] = useState('All');
@@ -86,26 +85,32 @@ const Spaces = () => {
   const [form, setForm] = useState(EMPTY_FORM);
   const [formErr, setFormErr] = useState('');
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
     if (!form.name || !form.price || !form.phone) { setFormErr('Name, price and phone are required.'); return; }
     if (Number(form.price) < 100) { setFormErr('Price must be at least ₹100/hr.'); return; }
-    const newSpace = {
-      ...form,
-      price: Number(form.price),
-      id: Date.now(),
-      img: form.img || 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&q=80&w=800',
-    };
-    setSpaces(prev => [newSpace, ...prev]);
-    setForm(EMPTY_FORM);
-    setFormErr('');
-    setShowForm(false);
+    try {
+      const res = await fetch('/api/spaces', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ ...form, price: Number(form.price) }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setFormErr(data.error || 'Failed to add listing.'); return; }
+      setSpaces(prev => [data, ...prev]);
+      setForm(EMPTY_FORM);
+      setFormErr('');
+      setShowForm(false);
+    } catch { setFormErr('Network error. Please try again.'); }
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('Remove this listing?')) {
+  const handleDelete = async (id) => {
+    if (!window.confirm('Remove this listing?')) return;
+    try {
+      await fetch(`/api/spaces/${id}`, { method: 'DELETE', credentials: 'include' });
       setSpaces(prev => prev.filter(s => s.id !== id));
-    }
+    } catch { alert('Failed to delete listing.'); }
   };
 
   const inputStyle = {

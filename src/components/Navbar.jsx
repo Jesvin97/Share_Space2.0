@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Rocket } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const { isAuthenticated, logout } = useAuth();
 
-  const handleSignOut = () => {
-    localStorage.removeItem('isAuthenticated');
-    window.location.href = '/';
+  const handleSignOut = async () => {
+    await logout();
+    navigate('/');
   };
 
   useEffect(() => {

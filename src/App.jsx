@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Lenis from '@studio-freight/lenis';
+import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -33,24 +34,26 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="app">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/spaces" element={<Spaces />} />
-          <Route path="/about" element={<Navigate to="/" replace />} />
-          <Route path="/careers" element={<Careers />} />
-          <Route path="/help" element={<HelpCenter />} />
-          <Route path="/trust" element={<TrustSafety />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/list-space" element={<ListSpace />} />
-          <Route path="/signin" element={<SignIn />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <ScrollToTop />
+        <div className="app">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/spaces" element={<Spaces />} />
+            <Route path="/about" element={<Navigate to="/" replace />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/help" element={<HelpCenter />} />
+            <Route path="/trust" element={<TrustSafety />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/list-space" element={<ListSpace />} />
+            <Route path="/signin" element={<SignIn />} />
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
