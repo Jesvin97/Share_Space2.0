@@ -1,39 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* LUXURY SPATIAL WALK (CARTIER STYLE) PALETTE */
-  --primary: #D4AF37; /* Rich Gold */
+  --primary: #D4AF37;
   --primary-hover: #F3E5AB;
-  --bg-color: #0A0A0A; /* Deep Black */
-  --surface: #141414; /* Off-black */
+  --bg-color: #0A0A0A;
+  --surface: #141414;
   --surface-light: #1C1C1C;
   --text-main: #F5F5F5;
   --text-muted: #A0A0A0;
-  --border: rgba(212, 175, 55, 0.15); /* Gold tinted borders */
+  --border: rgba(212, 175, 55, 0.15);
   --font-family: 'Outfit', sans-serif;
-  
-  /* 3D DEPTH CONTROL (DAVID WHYTE/TARKA STYLE) */
   --depth-near: 80px;
   --depth-mid: 0px;
   --depth-far: -150px;
-  
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
-  
-  --shadow-sm: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
-  --shadow-md: 0 20px 40px -15px rgba(0, 0, 0, 0.9);
-  --shadow-lg: 0 30px 60px -20px rgba(0, 0, 0, 1);
-  --shadow-glow: 0 0 30px rgba(212, 175, 55, 0.08);
-
-  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-sm: 0 10px 30px -10px rgba(0,0,0,0.8);
+  --shadow-md: 0 20px 40px -15px rgba(0,0,0,0.9);
+  --shadow-lg: 0 30px 60px -20px rgba(0,0,0,1);
+  --shadow-glow: 0 0 30px rgba(212,175,55,0.08);
+  --transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-family);
@@ -42,10 +34,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  position: relative;
 }
 
-/* ORGANIC DIORAMA GRAIN OVERLAY */
+/* Grain overlay */
 body::after {
   content: "";
   position: fixed;
@@ -57,25 +48,23 @@ body::after {
   mix-blend-mode: overlay;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+a { text-decoration: none; color: inherit; }
+button { background: none; border: none; cursor: pointer; font-family: inherit; }
 
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-}
-
+/* ── Container ── */
 .container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 0 2rem;
 }
+@media (max-width: 768px) {
+  .container { padding: 0 1.25rem; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 1rem; }
+}
 
-/* BUTTONS */
+/* ── Buttons ── */
 .btn-primary {
   background-color: var(--primary);
   color: #0A0A0A;
@@ -90,19 +79,12 @@ button {
   gap: 0.5rem;
   text-transform: uppercase;
   font-size: 0.85rem;
-  position: relative;
-  overflow: hidden;
   will-change: transform;
 }
-
-.btn-primary:active {
-  transform: scale(0.96) translateZ(-10px);
-}
-
 .btn-primary:hover {
   background-color: var(--primary-hover);
-  transform: translateY(-3px) translateZ(10px);
-  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(212,175,55,0.2);
 }
 
 .btn-outline {
@@ -116,45 +98,64 @@ button {
   transition: var(--transition);
   text-transform: uppercase;
   font-size: 0.85rem;
-  will-change: transform;
 }
-
 .btn-outline:hover {
-  background-color: rgba(212, 175, 55, 0.05);
+  background-color: rgba(212,175,55,0.05);
   border-color: var(--primary);
-  transform: translateY(-3px) translateZ(10px);
+  transform: translateY(-3px);
 }
 
-/* LUXURY GLASSMORPHISM */
+@media (max-width: 480px) {
+  .btn-primary, .btn-outline {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ── Glass ── */
 .glass {
-  background: rgba(20, 20, 20, 0.6);
+  background: rgba(20,20,20,0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
 }
 
-/* SECTION STYLING */
+/* ── Sections ── */
 .section {
   padding: 8rem 0;
   position: relative;
   transform-style: preserve-3d;
 }
+@media (max-width: 768px) {
+  .section { padding: 5rem 0; }
+}
+@media (max-width: 480px) {
+  .section { padding: 3.5rem 0; }
+}
 
 .section-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
   text-align: center;
-  color: var(--text-main);
   letter-spacing: -0.02em;
 }
 
 .section-subtitle {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 2vw, 1.25rem);
   color: var(--text-muted);
   text-align: center;
   max-width: 600px;
   margin: 0 auto 4rem;
   line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .section-subtitle { margin-bottom: 2.5rem; }
+}
+
+/* ── Page wrapper (for inner pages) ── */
+.page-wrapper {
+  min-height: 100vh;
+  padding-top: 80px;
 }

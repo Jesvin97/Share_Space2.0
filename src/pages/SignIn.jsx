@@ -25,10 +25,12 @@ const SignIn = () => {
 
     if (isSignUp) {
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userEmail', email);
       window.location.href = '/spaces';
     } else {
       if (email === 'admin@shrshape.com' && password === 'admin12345#@') {
         localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('userEmail', email);
         window.location.href = '/spaces';
       } else {
         setError('Invalid credentials. Please use the demo account.');

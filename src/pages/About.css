@@ -467,12 +467,50 @@
 }
 
 /* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .about-story { gap: 3rem; padding: 6rem 2rem; }
+  .about-philosophy { gap: 3rem; padding: 6rem 2rem; }
+  .about-search-section { padding: 5rem 2rem; }
+}
+
 @media (max-width: 900px) {
   .about-hero { grid-template-columns: 1fr; }
-  .about-hero-right { height: 50vh; }
-  .about-story { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
+  .about-hero-left { padding: 7rem 1.5rem 3rem; text-align: center; align-items: center; }
+  .about-eyebrow { justify-content: center; }
+  .about-hero-right { height: 45vh; }
+  .about-year-stamp { display: none; }
+  .about-story { grid-template-columns: 1fr; gap: 2.5rem; padding: 5rem 1.5rem; }
   .about-space-cards { grid-template-columns: 1fr; }
-  .about-philosophy { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
+  .about-philosophy { grid-template-columns: 1fr; gap: 2.5rem; padding: 5rem 1.5rem; }
   .about-team-card { position: static; }
-  .about-search-section, .about-cta-footer { padding: 5rem 1.5rem; }
+  .about-search-section { padding: 5rem 1.5rem; }
+  .about-cta-footer { padding: 5rem 1.5rem; }
+  .about-search-section::before { font-size: 10rem; }
+}
+
+@media (max-width: 600px) {
+  .about-hero-left { padding: 6rem 1.25rem 2.5rem; }
+  .about-hero-title { font-size: clamp(2.5rem, 10vw, 4rem); }
+  .about-hero-sub { font-size: 1rem; }
+  .about-hero-right { height: 38vh; }
+
+  .about-story { padding: 3.5rem 1.25rem; gap: 2rem; }
+  .about-stat-num { font-size: 3rem; }
+  .about-story-body p { font-size: 1rem; }
+
+  .about-search-section { padding: 3.5rem 1.25rem; }
+  .about-search-section::before { display: none; }
+  .about-space-cards { border-radius: 8px; }
+  .about-space-card { padding: 2rem 1.25rem; }
+
+  .about-philosophy { padding: 3.5rem 1.25rem; }
+  .about-philosophy-quote { font-size: clamp(1.5rem, 5vw, 2.2rem); padding-left: 1.25rem; }
+  .about-philosophy-text p { font-size: 1rem; }
+
+  .about-team-card { padding: 1.75rem 1.25rem; }
+  .about-member-name { font-size: 1rem; }
+
+  .about-cta-footer { padding: 3.5rem 1.25rem; }
+  .about-cta-footer p { font-size: 1rem; }
+  .about-cta-btn { padding: 0.85rem 1.75rem; font-size: 0.82rem; }
 }

@@ -1,16 +1,15 @@
 .features-section {
   position: relative;
   z-index: 2;
-  /* Dark Diorama floor gradient */
   background: linear-gradient(180deg, var(--bg-color) 0%, var(--surface) 100%);
   border-top: 1px solid rgba(255,255,255,0.02);
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 2rem;
-  perspective: 1500px; /* Essential for the 3D Tarka gallery feel */
+  perspective: 1500px;
 }
 
 .feature-card {
@@ -19,51 +18,60 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
   transform-style: preserve-3d;
   will-change: transform, box-shadow;
-  
-  /* Diorama Card Base styling */
-  background: rgba(20, 20, 20, 0.4);
-  border: 1px solid rgba(212, 175, 55, 0.1);
+  background: rgba(20,20,20,0.4);
+  border: 1px solid rgba(212,175,55,0.1);
   box-shadow: 0 15px 35px -10px rgba(0,0,0,0.8);
+  position: relative;
 }
 
-/* This ::before creates an internal 3D volume/glow effect inside the card */
 .feature-card::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(circle at top left, rgba(212, 175, 55, 0.08), transparent 70%);
+  background: radial-gradient(circle at top left, rgba(212,175,55,0.08), transparent 70%);
   pointer-events: none;
-  transform: translateZ(-10px);
 }
 
 .feature-icon {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(212, 175, 55, 0.15);
+  width: 56px;
+  height: 56px;
+  background-color: rgba(212,175,55,0.15);
   color: var(--primary);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  box-shadow: var(--shadow-ambient);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(212,175,55,0.3);
+  flex-shrink: 0;
 }
 
 .feature-card h3 {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--text-main);
-  text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  margin-bottom: 0.75rem;
 }
 
 .feature-card p {
   color: var(--text-muted);
   line-height: 1.6;
-  font-size: 1rem;
+  font-size: 0.975rem;
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    perspective: none;
+  }
+  .feature-card { padding: 1.75rem 1.25rem; }
+  .feature-card h3 { font-size: 1.1rem; }
+}
+
+@media (max-width: 480px) {
+  .features-grid { grid-template-columns: 1fr; }
 }

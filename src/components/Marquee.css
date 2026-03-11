@@ -60,9 +60,13 @@
   transition: color 0.3s ease;
 }
 
-/* Starred separators glow gold */
-.marquee-item:nth-child(even) {
-  color: var(--primary);
-  text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
-  font-size: 0.9em;
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .marquee-section { padding: 2rem 0; }
+  .marquee-item { font-size: 1rem; padding: 0 1.25rem; }
+  .marquee-track { margin-bottom: 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  .marquee-item { font-size: 0.85rem; padding: 0 1rem; }
 }
