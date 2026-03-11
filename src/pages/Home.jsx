@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Marquee from '../components/Marquee';
@@ -67,7 +68,7 @@ const Home = () => {
           <div className="about-story-body about-reveal" ref={addToRefs}>
             <h2>We started with a <em>frustration.</em></h2>
             <p>
-              In 2019, our founders — a cinematographer and a fashion photographer — were in the middle of a last-minute save-the-date shoot for a client in Mumbai. The location they'd booked fell through 18 hours before the call time. The scramble that followed was exhausting, expensive, and completely avoidable.
+              In 2019, our founders — Jessyln and Joyal — were in the middle of a last-minute save-the-date shoot for a client in Kerala.
             </p>
             <p>
               That was the night <strong>SpareSpace was born.</strong>
@@ -126,38 +127,31 @@ const Home = () => {
                 When a couple walks into the right space for their save-the-date shoot, you can see it in their body language. The stiffness dissolves. The laughter comes naturally. The camera just catches what's already there.
               </p>
               <p>
-                That's why we maintain an ever-growing directory of privately scouted spaces across Mumbai, Delhi, Bangalore, Hyderabad, Pune, and Jaipur — from boutique studio lofts to palatial private bungalows. And we're always, always looking to expand it.
+                That's why we maintain an ever-growing directory of privately scouted spaces across Bangalore, Chennai, Hyderabad, Kochi, Coimbatore, and Thiruvananthapuram — from boutique studio lofts to palatial private bungalows. And we're always, always looking to expand it.
               </p>
             </div>
           </div>
           <div className="about-team-card about-reveal" ref={addToRefs}>
             <div className="about-team-label">The Core Team</div>
             <div className="about-team-member">
-              <div className="about-avatar">RK</div>
+              <div className="about-avatar">JS</div>
               <div>
-                <div className="about-member-name">Rohan Khanna</div>
-                <div className="about-member-role">Co-Founder & Creative Director</div>
+                <div className="about-member-name">Jessyln Sheji</div>
+                <div className="about-member-role">Co-Founder & Chief Executive Officer</div>
               </div>
             </div>
             <div className="about-team-member">
-              <div className="about-avatar">SA</div>
+              <div className="about-avatar">JO</div>
               <div>
-                <div className="about-member-name">Simran Ahuja</div>
-                <div className="about-member-role">Co-Founder & Lead Photographer</div>
+                <div className="about-member-name">Joyal</div>
+                <div className="about-member-role">Co-Founder & Chief Brand Officer (CBO)</div>
               </div>
             </div>
             <div className="about-team-member">
-              <div className="about-avatar">TM</div>
+              <div className="about-avatar">JV</div>
               <div>
-                <div className="about-member-name">Tarun Mehta</div>
-                <div className="about-member-role">Head of Location Scouting</div>
-              </div>
-            </div>
-            <div className="about-team-member">
-              <div className="about-avatar">PD</div>
-              <div>
-                <div className="about-member-name">Priya Desai</div>
-                <div className="about-member-role">Production Manager</div>
+                <div className="about-member-name">Jesvin Saji</div>
+                <div className="about-member-role">Co-Founder & Chief Technology Officer</div>
               </div>
             </div>
           </div>
@@ -169,7 +163,7 @@ const Home = () => {
           <p>
             Whether you own a property or manage a venue — if it has good bones and great light, we want to know about it. Partner with SpareSpace.
           </p>
-          <a href="mailto:hello@sparespace.in" className="about-cta-btn">Get in Touch</a>
+          <Link to="/list-space" className="about-cta-btn">Get in Touch</Link>
         </section>
       </div>
 
