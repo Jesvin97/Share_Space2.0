@@ -9,6 +9,16 @@ if (!SECRET && process.env.NODE_ENV === 'production') {
 const FALLBACK_SECRET = SECRET || 'dev-secret-change-in-production-min-64-chars!!';
 
 /**
+ * Master Admin Emails: Only these 3 emails have edit/modify/delete permissions.
+ * All other users are registered as customers with view-only access.
+ */
+export const ADMIN_EMAILS = [
+  'admin@shrshape.com',
+  'jesvin@shrshape.com',
+  'manager@shrshape.com'
+];
+
+/**
  * Sign a JWT payload. Token expires in 24 hours.
  */
 export function signToken(payload) {

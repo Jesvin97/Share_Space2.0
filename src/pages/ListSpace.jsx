@@ -1,24 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PageHeader from '../components/PageHeader';
-import { ShieldCheck, UploadCloud } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 const ListSpace = () => {
+  const [formData, setFormData] = useState({
+    spaceName: '',
+    location: '',
+    hourlyRate: ''
+  });
+
+  const handleWhatsAppSubmit = (e) => {
+    e.preventDefault();
+    const { spaceName, location, hourlyRate } = formData;
+    
+    if (parseInt(hourlyRate) < 100) {
+      alert('Hourly rate must be at least ₹100');
+      return;
+    }
+
+    const message = `hi this is location "${spaceName}" from "${location}" and i charging rate ₹ "${hourlyRate}"`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+    
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   return (
     <div className="page-wrapper">
       <PageHeader title="List Your Space" subtitle="Turn your space into a steady source of income. Join our community of premium hosts today." />
       <section className="section">
         <div className="container" style={{ textAlign: 'center', maxWidth: '1000px', margin: '0 auto' }}>
-          
+
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#e6f7ef', color: '#0d6efd', padding: '0.5rem 1rem', borderRadius: '50px', marginBottom: '2rem', fontSize: '0.875rem', fontWeight: '600' }}>
-             <ShieldCheck size={18} color="#0d6efd" />
-             <span>100% Secure & Verified Platform</span>
+            <ShieldCheck size={18} color="#0d6efd" />
+            <span>100% Secure & Verified Platform</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', textAlign: 'left', alignItems: 'start' }}>
             <div>
               <h2 style={{ marginBottom: '1rem', fontSize: '1.75rem' }}>Start Earning Today</h2>
               <ol style={{ textAlign: 'left', marginBottom: '2rem', lineHeight: '2', paddingLeft: '1.25rem' }}>
-                <li><strong>Describe Your Space:</strong> Upload high-quality photos and list your amenities.</li>
+                <li><strong>Describe Your Space:</strong> Provide essential details and pricing for your listing.</li>
                 <li><strong>Set Your Rules:</strong> Define your availability, pricing, and specific rules.</li>
                 <li><strong>Review and Accept:</strong> Start receiving booking requests from verified users.</li>
               </ol>
@@ -31,26 +58,47 @@ const ListSpace = () => {
 
             <div className="glass" style={{ padding: '2rem', borderRadius: 'var(--radius-lg)' }}>
               <h3 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Create Secure Listing</h3>
-              <form onSubmit={e => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <form onSubmit={handleWhatsAppSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div>
                   <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>Space Name</label>
-                  <input type="text" placeholder="e.g. Vintage Loft Studio" style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--bg-color)', color: 'var(--text-main)' }} required />
+                  <input 
+                    type="text" 
+                    name="spaceName"
+                    placeholder="e.g. Vintage Loft Studio" 
+                    value={formData.spaceName}
+                    onChange={handleChange}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--bg-color)', color: 'var(--text-main)' }} 
+                    required 
+                  />
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>Location / City</label>
-                  <input type="text" placeholder="e.g. Bangalore" style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--bg-color)', color: 'var(--text-main)' }} required />
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>Location / City (South India)</label>
+                  <input 
+                    type="text" 
+                    name="location"
+                    placeholder="e.g. Bangalore, Chennai, Kochi" 
+                    value={formData.location}
+                    onChange={handleChange}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--bg-color)', color: 'var(--text-main)' }} 
+                    required 
+                  />
                 </div>
                 <div>
                   <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>Hourly Rate (₹)</label>
-                  <input type="number" placeholder="1500" min="100" style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--bg-color)', color: 'var(--text-main)' }} required />
-                </div>
-                
-                <div style={{ border: '2px dashed var(--border)', padding: '2rem', textAlign: 'center', borderRadius: 'var(--radius-sm)', marginTop: '0.5rem', color: 'var(--text-muted)' }}>
-                  <UploadCloud size={32} style={{ margin: '0 auto 0.5rem', display: 'block' }} />
-                  <span style={{ fontSize: '0.875rem' }}>Upload Photos (Up to 10)</span>
+                  <input 
+                    type="number" 
+                    name="hourlyRate"
+                    placeholder="e.g. 500" 
+                    min="100"
+                    value={formData.hourlyRate}
+                    onChange={handleChange}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--bg-color)', color: 'var(--text-main)' }} 
+                    required 
+                  />
+                  <small style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Min amount: ₹100</small>
                 </div>
 
-                <button className="btn-primary" style={{ width: '100%', padding: '1rem', marginTop: '1rem' }}>Submit Listing & Pay ₹499</button>
+                <button type="submit" className="btn-primary" style={{ width: '100%', padding: '1rem', marginTop: '1rem' }}>Submit Listing via WhatsApp</button>
               </form>
             </div>
           </div>

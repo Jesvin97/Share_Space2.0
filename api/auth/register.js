@@ -1,7 +1,7 @@
 // api/auth/register.js — POST /api/auth/register
 import bcrypt from 'bcryptjs';
 import { initDb, sql } from '../_lib/db.js';
-import { signToken } from '../_lib/auth.js';
+import { signToken, ADMIN_EMAILS } from '../_lib/auth.js';
 import { sanitizeStr } from '../_lib/sanitize.js';
 import { isRateLimited } from '../_lib/rateLimit.js';
 import { applySecurityHeaders, getClientIp } from '../_lib/headers.js';
@@ -33,11 +33,14 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: 'An account with this email already exists.' });
     }
 
+    // Determine role: 3 master emails get 'admin', all others get 'customer'
+    const role = ADMIN_EMAILS.includes(email) ? 'admin' : 'customer';
+
     // Hash with cost factor 12 (OWASP recommended minimum)
     const hash = await bcrypt.hash(password, 12);
     const result = await sql`
       INSERT INTO users (email, password_hash, role)
-      VALUES (${email}, ${hash}, 'user')
+      VALUES (${email}, ${hash}, ${role})
       RETURNING id, email, role
     `;
     const user = result.rows[0];

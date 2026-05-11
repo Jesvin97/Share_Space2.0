@@ -33,11 +33,28 @@ export async function initDb() {
     )
   `;
 
+  // Create blogs table (AEO/GEO Enhanced)
+  await sql`
+    CREATE TABLE IF NOT EXISTS blogs (
+      id             SERIAL PRIMARY KEY,
+      title          VARCHAR(255) NOT NULL,
+      slug           VARCHAR(255) UNIQUE NOT NULL,
+      content        TEXT NOT NULL,
+      category       VARCHAR(50) NOT NULL, -- SEO, AEO, LLMSEO, GEO
+      image_url      TEXT,
+      summary_tldr   TEXT,
+      structured_data JSONB,
+      citations      JSONB,
+      created_at     TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
+
   // Seed admin user if not exists
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@shrshape.com';
+  const adminPass  = process.env.ADMIN_PASSWORD || 'admin12345#@';
   const existing = await sql`SELECT id FROM users WHERE email = ${adminEmail} LIMIT 1`;
   if (existing.rows.length === 0) {
-    const hash = await bcrypt.hash('admin12345#@', 12);
+    const hash = await bcrypt.hash(adminPass, 12);
     await sql`
       INSERT INTO users (email, password_hash, role)
       VALUES (${adminEmail}, ${hash}, 'admin')
@@ -61,6 +78,39 @@ export async function initDb() {
     ];
     for (const s of defaultSpaces) {
       await sql`INSERT INTO spaces (name, location, type, price, phone, img) VALUES (${s.name}, ${s.location}, ${s.type}, ${s.price}, ${s.phone}, ${s.img})`;
+    }
+  }
+
+  // Seed default blogs if table is empty
+  const blogCount = await sql`SELECT COUNT(*) FROM blogs`;
+  if (Number(blogCount.rows[0].count) === 0) {
+    const defaultBlogs = [
+      {
+        title: 'Mastering AEO: The Future of Answer Engines',
+        slug: 'mastering-aeo',
+        category: 'AEO',
+        content: 'Answer Engine Optimization is the next frontier of search...',
+        summary_tldr: 'AEO focuses on providing direct answers to user queries on platforms like Perplexity and ChatGPT.',
+        structured_data: JSON.stringify({ "@context": "https://schema.org", "@type": "Article", "headline": "Mastering AEO" }),
+        citations: JSON.stringify([{ "name": "Google Developers", "url": "https://developers.google.com/search/docs" }]),
+        image_url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800'
+      },
+      {
+        title: 'GEO: Optimizing for Generative Search',
+        slug: 'geo-optimization',
+        category: 'GEO',
+        content: 'Generative Engine Optimization (GEO) is about making your content the primary source for AI models...',
+        summary_tldr: 'GEO ensures your content is authoritative and structured for easy parsing by generative AI.',
+        structured_data: JSON.stringify({ "@context": "https://schema.org", "@type": "TechArticle", "name": "GEO Optimization" }),
+        citations: JSON.stringify([{ "name": "Search Engine Journal", "url": "https://www.searchenginejournal.com" }]),
+        image_url: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800'
+      }
+    ];
+    for (const b of defaultBlogs) {
+      await sql`
+        INSERT INTO blogs (title, slug, category, content, summary_tldr, structured_data, citations, image_url)
+        VALUES (${b.title}, ${b.slug}, ${b.category}, ${b.content}, ${b.summary_tldr}, ${b.structured_data}, ${b.citations}, ${b.image_url})
+      `;
     }
   }
 }

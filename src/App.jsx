@@ -13,6 +13,9 @@ import Contact from './pages/Contact';
 import ListSpace from './pages/ListSpace';
 import SignIn from './pages/SignIn';
 import Spaces from './pages/Spaces';
+import Blogs from './pages/Blogs';
+import AdminDashboard from './pages/AdminDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -42,6 +45,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/spaces" element={<Spaces />} />
+            <Route path="/blogs" element={<Blogs />} />
             <Route path="/about" element={<Navigate to="/" replace />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/help" element={<HelpCenter />} />
@@ -49,6 +53,14 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/list-space" element={<ListSpace />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route 
+              path="/portal-manager" 
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
           <Footer />
         </div>

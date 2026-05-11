@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Rocket } from 'lucide-react';
+import { Menu, X, Rocket, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
@@ -9,7 +9,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, isAdmin, logout } = useAuth();
 
   const handleSignOut = async () => {
     await logout();
@@ -34,8 +34,14 @@ const Navbar = () => {
         
         <nav className="navbar-links desktop-only">
           <Link to="/spaces">Spaces</Link>
+          <Link to="/blogs">Blogs</Link>
           <Link to="/careers">Careers</Link>
           <Link to="/contact">Contact</Link>
+          {isAdmin && (
+            <Link to="/portal-manager" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--primary)' }}>
+              <ShieldCheck size={16} /> Admin
+            </Link>
+          )}
         </nav>
 
         <div className="navbar-actions desktop-only">
@@ -66,8 +72,14 @@ const Navbar = () => {
             transition={{ duration: 0.3 }}
           >
             <Link to="/spaces" onClick={() => setMobileMenuOpen(false)}>Spaces</Link>
+            <Link to="/blogs" onClick={() => setMobileMenuOpen(false)}>Blogs</Link>
             <Link to="/careers" onClick={() => setMobileMenuOpen(false)}>Careers</Link>
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+            {isAdmin && (
+              <Link to="/portal-manager" onClick={() => setMobileMenuOpen(false)} style={{ color: 'var(--primary)', fontWeight: '600' }}>
+                Admin Portal
+              </Link>
+            )}
             <div className="mobile-actions">
               <button className="btn-outline" onClick={() => { navigate('/list-space'); setMobileMenuOpen(false); }}>List your space</button>
               {isAuthenticated ? (

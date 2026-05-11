@@ -8,13 +8,13 @@ const PROTO_RE      = /^(javascript|data|vbscript):/i;
 /**
  * Sanitize a single string value.
  */
-export function sanitizeStr(value) {
+export function sanitizeStr(value, maxLen = 1000) {
   if (typeof value !== 'string') return '';
   return value
     .replace(NULL_BYTE_RE, '')   // null byte injection
     .replace(HTML_TAG_RE, '')    // strip HTML (XSS)
     .trim()
-    .slice(0, 1000);             // max length guard
+    .slice(0, maxLen);           // max length guard
 }
 
 /**
@@ -43,14 +43,25 @@ export function sanitizeUrl(value) {
 
 /**
  * Sanitize a whole object's string fields.
- * Pass an object and a key→'str'|'url'|'num' schema.
+ * Pass an object and a key→'str'|'url'|'num'|'long_str'|'json' schema.
  */
 export function sanitizeBody(body, schema) {
   const out = {};
   for (const [key, type] of Object.entries(schema)) {
     if (type === 'str') out[key] = sanitizeStr(body[key]);
+    else if (type === 'long_str') out[key] = sanitizeStr(body[key], 100000); // 100k for blog posts
     else if (type === 'url') out[key] = sanitizeUrl(body[key] || '');
     else if (type === 'num') out[key] = Number(body[key]) || 0;
+    else if (type === 'json') {
+      try {
+        const val = body[key];
+        // If it's already an object, stringify it to ensure it's clean then re-parse or just use it.
+        // Actually, let's just ensure it's valid JSON.
+        out[key] = typeof val === 'object' ? JSON.stringify(val) : JSON.stringify(JSON.parse(val || '{}'));
+      } catch {
+        out[key] = '{}';
+      }
+    }
   }
   return out;
 }
