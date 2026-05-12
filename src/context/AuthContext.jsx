@@ -1,56 +1,48 @@
-// src/context/AuthContext.jsx
-// Provides auth state across the entire app.
-// Replaces all localStorage.getItem('isAuthenticated') checks.
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext } from 'react';
+import { SessionProvider, useSession, signIn, signOut } from 'next-auth/react';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser]       = useState(null);  // { email, role } or null
-  const [loading, setLoading] = useState(true);
+  return (
+    <SessionProvider>
+      <AuthConsumer>{children}</AuthConsumer>
+    </SessionProvider>
+  );
+};
 
-  // On mount, restore session from the httpOnly cookie via the /api/auth/me endpoint
-  useEffect(() => {
-    fetch('/api/auth/me', { credentials: 'include' })
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { setUser(data || null); })
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-  }, []);
+const AuthConsumer = ({ children }) => {
+  const { data: session, status } = useSession();
+  
+  const loading = status === 'loading';
+  const user = session?.user || null;
+  const isAuthenticated = !!session;
+  const isAdmin = session?.user?.role === 'admin';
 
-  const login = useCallback(async (email, password) => {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ email, password }),
+  const login = async (email, password) => {
+    const result = await signIn('credentials', {
+      redirect: false,
+      email,
+      password,
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Login failed.');
-    setUser({ email: data.email, role: data.role });
-    return data;
-  }, []);
+    if (result.error) throw new Error(result.error);
+    return result;
+  };
 
-  const register = useCallback(async (email, password) => {
+  const register = async (email, password) => {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
       body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Registration failed.');
-    setUser({ email: data.email, role: data.role });
-    return data;
-  }, []);
+    
+    // Automatically sign in after registration
+    return login(email, password);
+  };
 
-  const logout = useCallback(async () => {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-    setUser(null);
-  }, []);
-
-  const isAuthenticated = !!user;
-  const isAdmin         = user?.role === 'admin';
+  const logout = () => signOut({ redirect: false });
 
   return (
     <AuthContext.Provider value={{ user, loading, isAuthenticated, isAdmin, login, register, logout }}>
