@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { Search, MapPin } from 'lucide-react';
+
 import './Hero.css';
 
 const Hero = () => {
@@ -49,23 +49,6 @@ const Hero = () => {
           <h1>Find the perfect space for your next big idea</h1>
           <p>Whether you need a studio for a content shoot, a warehouse for a production, or a premium venue for your corporate event, Spare Space connects you with unique spaces across South India.</p>
           
-          <motion.div 
-            className="search-bar glass"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
-            <div className="search-input-group">
-              <MapPin className="search-icon" size={20} />
-              <input type="text" placeholder="Where do you want to book?" />
-            </div>
-            <div className="search-divider"></div>
-            <div className="search-input-group">
-              <Search className="search-icon" size={20} />
-              <input type="text" placeholder="What are you shooting?" />
-            </div>
-            <button className="btn-primary search-btn">Search Spaces</button>
-          </motion.div>
         </motion.div>
 
         {/* 3D Container specific wrap */}
@@ -95,11 +78,6 @@ const Hero = () => {
             />
             
             <motion.div className="img-stack" style={{ transform: "translateZ(calc(var(--depth-near) + 40px))" }}>
-              <img 
-                src="https://images.unsplash.com/photo-1549488344-c10f80bc8bd1?auto=format&fit=crop&w=400&q=80" 
-                alt="Studio Space" 
-                className="img-secondary" 
-              />
               <img 
                 src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=400&q=80" 
                 alt="Warehouse Event Space" 
