@@ -37,6 +37,6 @@
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/(spaces|careers|contact|blogs|about)(.*)", "destination": "/index.html" }
   ]
 }
