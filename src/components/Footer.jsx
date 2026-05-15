@@ -34,10 +34,10 @@ const Footer = () => {
           </div>
           <div className="link-group">
             <h4>Discover</h4>
-            <Link to="/">Chennai Spaces</Link>
-            <Link to="/">Bangalore Spaces</Link>
-            <Link to="/">Hyderabad Spaces</Link>
-            <Link to="/">Kerala Spaces</Link>
+            <Link to="/spaces?city=chennai">Chennai Spaces</Link>
+            <Link to="/spaces?city=bangalore">Bangalore Spaces</Link>
+            <Link to="/spaces?city=hyderabad">Hyderabad Spaces</Link>
+            <Link to="/spaces?city=kerala">Kerala Spaces</Link>
           </div>
         </div>
       </div>

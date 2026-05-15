@@ -29,6 +29,18 @@
   --transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
 }
 
+[data-theme='light'] {
+  --bg-color: #FFFFFF;
+  --surface: #F8F8F8;
+  --surface-light: #F0F0F0;
+  --text-main: #1A1A1A;
+  --text-muted: #666666;
+  --border: rgba(212, 175, 55, 0.3);
+  --shadow-sm: 0 10px 30px -10px rgba(0,0,0,0.1);
+  --shadow-md: 0 20px 40px -15px rgba(0,0,0,0.15);
+  --shadow-lg: 0 30px 60px -20px rgba(0,0,0,0.2);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html { }
@@ -37,6 +49,8 @@ body {
   font-family: var(--font-family);
   background-color: var(--bg-color);
   color: var(--text-main);
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -84,7 +98,7 @@ button { background: none; border: none; cursor: pointer; font-family: inherit; 
   justify-content: center;
   gap: 0.5rem;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 14px;
   will-change: transform;
 }
 .btn-primary:hover {
@@ -103,7 +117,7 @@ button { background: none; border: none; cursor: pointer; font-family: inherit; 
   border-radius: var(--radius-sm);
   transition: var(--transition);
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 14px;
 }
 .btn-outline:hover {
   background-color: rgba(212,175,55,0.05);

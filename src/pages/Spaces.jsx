@@ -1,7 +1,48 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageHeader from '../components/PageHeader';
-import { MapPin, Phone, SlidersHorizontal, X } from 'lucide-react';
+import { MapPin, Phone, SlidersHorizontal, X, Eye } from 'lucide-react';
+
+/* ─── Contact Reveal Component ─── */
+const SpaceContact = ({ phone }) => {
+  const [revealed, setRevealed] = useState(false);
+
+  if (revealed) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)', fontWeight: '500', animation: 'fadeIn 0.3s ease' }}>
+        <Phone size={15} color="#00c853" />
+        <a href={`tel:${phone}`} style={{ color: 'inherit', textDecoration: 'none' }}>{phone}</a>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      onClick={() => setRevealed(true)}
+      style={{
+        background: 'rgba(212,175,55,0.1)',
+        border: '1px dashed var(--primary)',
+        color: 'var(--primary)',
+        padding: '0.4rem 0.8rem',
+        borderRadius: '6px',
+        fontSize: '0.8rem',
+        fontWeight: '600',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.4rem',
+        width: '100%',
+        justifyContent: 'center',
+        transition: 'all 0.2s ease'
+      }}
+      onMouseEnter={e => e.currentTarget.style.background = 'rgba(212,175,55,0.2)'}
+      onMouseLeave={e => e.currentTarget.style.background = 'rgba(212,175,55,0.1)'}
+    >
+      <Eye size={14} /> Reveal Contact
+    </button>
+  );
+};
 
 /* ─── Default seed data ─── */
 const DEFAULT_SPACES = [
@@ -49,13 +90,31 @@ const EMPTY_FORM = { name: '', location: 'Bangalore', type: 'Studio', price: '',
 const Spaces = () => {
   const [fetchError, setFetchError] = useState(false);
   const [spaces, setSpaces] = useState(DEFAULT_SPACES);
+  const location = useLocation();
 
   useEffect(() => {
+    document.title = "Browse Studios & Creative Spaces | SpareSpace";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', "Browse and book photography studios, film sets, and event venues in Bangalore, Chennai, Kochi and more.");
+    }
+
+    // 1. Fetch from API
     fetch('/api/spaces')
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data) setSpaces(data); })
       .catch(() => setFetchError(true));
-  }, []);
+
+    // 2. Check for query params (e.g. ?city=chennai)
+    const params = new URLSearchParams(location.search);
+    const city = params.get('city');
+    if (city) {
+      const formattedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+      if (LOCATIONS.includes(formattedCity)) {
+        setFilterLocation(formattedCity);
+      }
+    }
+  }, [location.search]);
 
   /* Filters */
   const [filterLocation, setFilterLocation] = useState('All');
@@ -97,21 +156,22 @@ const Spaces = () => {
             ))}
           </div>
 
-          {/* Max price input */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Max ₹</span>
-            <input
-              type="number"
-              placeholder="Any"
-              value={maxPrice}
-              onChange={e => setMaxPrice(e.target.value)}
-              style={{
-                width: '90px', padding: '0.4rem 0.6rem', borderRadius: '100px',
-                border: maxPrice ? '1px solid var(--primary)' : '1px solid rgba(255,255,255,0.1)',
-                background: 'transparent', color: 'var(--text-main)',
-                fontFamily: 'inherit', fontSize: '0.82rem', outline: 'none',
-              }}
-            />
+          {/* Price chips */}
+          <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', alignSelf: 'center', marginRight: '0.5rem' }}>Price:</span>
+            {[
+              { label: 'Under ₹2k', value: '2000' },
+              { label: '₹2k - ₹5k', value: '5000' },
+              { label: '₹5k+', value: '100000' }
+            ].map(p => (
+              <Pill 
+                key={p.value} 
+                active={maxPrice === p.value} 
+                onClick={() => setMaxPrice(maxPrice === p.value ? '' : p.value)}
+              >
+                {p.label}
+              </Pill>
+            ))}
           </div>
 
           {/* Clear */}
@@ -119,9 +179,9 @@ const Spaces = () => {
             <button
               type="button"
               onClick={clearFilters}
-              style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.3rem', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.82rem', fontFamily: 'inherit' }}
+              style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.3rem', background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', fontSize: '0.82rem', fontWeight: '700' }}
             >
-              <X size={13} /> Clear
+              <X size={13} /> RESET FILTERS
             </button>
           )}
         </div>
@@ -149,39 +209,40 @@ const Spaces = () => {
                 className="glass"
                 style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative' }}
               >
-                {/* Image */}
-                <div style={{ height: '200px', overflow: 'hidden' }}>
-                  <img
-                    src={space.img}
-                    alt={space.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
-                    onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.07)'}
-                    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-                  />
-                </div>
-
-                {/* Details */}
-                <div style={{ padding: '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <h3 style={{ fontSize: '1.1rem', margin: 0 }}>{space.name}</h3>
-                    <span style={{ fontWeight: '700', color: 'var(--primary)', whiteSpace: 'nowrap', marginLeft: '0.5rem' }}>₹{space.price.toLocaleString()}/hr</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.85rem', flexWrap: 'wrap' }}>
-                    <MapPin size={13} />
-                    <span>{space.location}</span>
-                    <span style={{ opacity: 0.4 }}>•</span>
-                    <span style={{ background: 'rgba(212,175,55,0.1)', color: 'var(--primary)', padding: '0.15rem 0.6rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '600' }}>
-                      {space.type}
-                    </span>
-                  </div>
-
-                  <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)', fontWeight: '500' }}>
-                      <Phone size={15} color="#00c853" />
-                      <span>{space.phone}</span>
+                <Link to={`/spaces/${space.id}`} style={{ display: 'flex', flexDirection: 'column', height: '100%', color: 'inherit' }}>
+                  {/* Image */}
+                  <div style={{ height: '220px', overflow: 'hidden', position: 'relative' }}>
+                    <img
+                      src={space.img || "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&q=80&w=800"}
+                      alt={space.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.07)'}
+                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                    />
+                    <div style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary)' }}>
+                      ₹{space.price.toLocaleString()}/hr
                     </div>
                   </div>
-                </div>
+
+                  {/* Details */}
+                  <div style={{ padding: '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontSize: '1.15rem', marginBottom: '0.5rem' }}>{space.name}</h3>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-muted)', marginBottom: '1.25rem', fontSize: '0.85rem' }}>
+                      <MapPin size={13} />
+                      <span>{space.location}</span>
+                      <span style={{ opacity: 0.4 }}>•</span>
+                      <span>{space.type}</span>
+                    </div>
+
+                    <div style={{ marginTop: 'auto' }}>
+                      <div style={{ marginBottom: '1rem' }}>
+                        <SpaceContact phone={space.phone} />
+                      </div>
+                      <button className="btn-outline" style={{ width: '100%', fontSize: '0.8rem', padding: '0.6rem' }}>View Details</button>
+                    </div>
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </AnimatePresence>

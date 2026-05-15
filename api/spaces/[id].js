@@ -12,6 +12,15 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid space ID.' });
   }
 
+  // ── GET: fetch single space ──────────────────────────────────────────────────
+  if (req.method === 'GET') {
+    const result = await sql`SELECT * FROM spaces WHERE id = ${spaceId}`;
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Space not found.' });
+    }
+    return res.status(200).json(result.rows[0]);
+  }
+
   // ── DELETE: removes a listing (Now Public) ─────────────────────────────────────
   if (req.method === 'DELETE') {
     const result = await sql`DELETE FROM spaces WHERE id = ${spaceId} RETURNING id`;

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 import './Hero.css';
 
@@ -47,8 +48,12 @@ const Hero = () => {
         >
           <span className="hero-badge">Discover & Book in South India</span>
           <h1>Find the perfect space for your next big idea</h1>
-          <p>Whether you need a studio for a content shoot, a warehouse for a production, or a premium venue for your corporate event, Spare Space connects you with unique spaces across South India.</p>
+          <p>Whether you need a studio for a content shoot, a warehouse for a production, or a premium venue for your corporate event, SpareSpace connects you with unique spaces across South India.</p>
           
+          <div className="hero-ctas" style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+            <Link to="/spaces" className="btn-primary">Browse Spaces</Link>
+            <Link to="/list-space" className="btn-outline">List Your Space</Link>
+          </div>
         </motion.div>
 
         {/* 3D Container specific wrap */}

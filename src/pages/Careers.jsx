@@ -1,25 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PageHeader from '../components/PageHeader';
+import { client } from '../lib/sanity';
 
-const jobs = [
-  { title: "General Manager", type: "Full-Time (2+ Years Exp)", desc: "Lead our operational strategy and oversee rapid regional expansion." },
-  { title: "Call Center Representative", type: "Full-Time (1+ Years Exp)", desc: "Be the voice of our brand and support our hosts and guests daily." },
-  { title: "Regional Manager", type: "Full-Time (2+ Years Exp)", desc: "Drive growth and ensure standard excellence across your assigned region." },
-  { title: "Finance Analyst", type: "Full-Time (2+ Years Exp)", desc: "Analyze financial data, manage budgets, and forecast our future growth." },
-  { title: "HR Generalist", type: "Full-Time (5+ Years Exp)", desc: "Recruit top talent and foster an incredible, inclusive workplace culture." },
-  { title: "Marketing Intern", type: "Internship", desc: "Assist in crafting campaigns and managing our vibrant social media channels." },
-  { title: "Software Engineer", type: "Full-Time (2+ Years Exp)", desc: "Build scalable and elegant solutions to power our booking infrastructure." },
-  { title: "Operations Associate", type: "Full-Time (2+ Years Exp)", desc: "Streamline day-to-day operations and improve our host onboarding experience." },
-  { title: "Sales Intern", type: "Internship", desc: "Help our sales team identify new venue opportunities and generate leads." },
-  { title: "Community Manager", type: "Full-Time (2+ Years Exp)", desc: "Nurture our creative community and organize offline events for our creators." },
-  { title: "Product Designer", type: "Full-Time (3+ Years Exp)", desc: "Design intuitive and beautiful user experiences for our hosts and guests." },
-  { title: "QA Engineer", type: "Full-Time (2+ Years Exp)", desc: "Ensure the reliability and quality of our web and mobile applications." },
-  { title: "Data Scientist", type: "Full-Time (3+ Years Exp)", desc: "Leverage data to optimize pricing models and improve search recommendations." },
-  { title: "Customer Success Manager", type: "Full-Time (2+ Years Exp)", desc: "Onboard and guide our top-tier hosts to maximize their earning potential." },
-  { title: "Content Writer Intern", type: "Internship", desc: "Write compelling copy for our blog, newsletters, and space listings." }
-];
+const CAREERS_QUERY = `*[_type == "career"] | order(order asc) {
+  _id, title, type, description, location
+}`;
 
 const Careers = () => {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    document.title = "Creative Industry Jobs & Careers | SpareSpace";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', "Join the team building the future of physical creative infrastructure. Explore jobs in South India's premier space booking platform.");
+    }
+
+    client.fetch(CAREERS_QUERY)
+      .then(data => { setJobs(data); setLoading(false); })
+      .catch(err => { console.error('Sanity careers fetch error:', err); setLoading(false); });
+  }, []);
   return (
     <div className="page-wrapper">
       <PageHeader title="Careers at SpareSpace" subtitle="Join the team that's building the future of physical creative infrastructure." />
@@ -29,14 +30,23 @@ const Careers = () => {
           <p style={{ color: 'var(--text-muted)', fontSize: '1.125rem', marginBottom: '3rem' }}>Explore our open roles below and find where you belong.</p>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', textAlign: 'left' }}>
-            {jobs.map((job, index) => (
-              <div key={index} className="glass" style={{ padding: '2rem', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ marginBottom: '0.5rem', fontSize: '1.5rem' }}>{job.title}</h3>
-                <span style={{ display: 'inline-block', padding: '0.25rem 0.75rem', backgroundColor: 'var(--border)', borderRadius: 'var(--radius-lg)', fontSize: '0.875rem', fontWeight: '500', marginBottom: '1rem', alignSelf: 'flex-start' }}>{job.type}</span>
-                <p style={{ color: 'var(--text-muted)', flexGrow: 1, marginBottom: '2rem' }}>{job.desc}</p>
-                <button className="btn-primary" style={{ width: '100%' }}>Apply Now !</button>
-              </div>
-            ))}
+            {loading ? (
+              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem' }}>Loading opportunities...</div>
+            ) : jobs.length === 0 ? (
+              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem' }}>No open roles at the moment. Check back soon!</div>
+            ) : (
+              jobs.map((job) => (
+                <div key={job._id} className="glass" style={{ padding: '2rem', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column' }}>
+                  <h3 style={{ marginBottom: '0.5rem', fontSize: '1.5rem' }}>{job.title}</h3>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                    <span style={{ display: 'inline-block', padding: '0.25rem 0.75rem', backgroundColor: 'var(--border)', borderRadius: 'var(--radius-lg)', fontSize: '0.875rem', fontWeight: '500' }}>{job.type}</span>
+                    {job.location && <span style={{ display: 'inline-block', padding: '0.25rem 0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 'var(--radius-lg)', fontSize: '0.875rem', color: 'var(--text-muted)' }}>{job.location}</span>}
+                  </div>
+                  <p style={{ color: 'var(--text-muted)', flexGrow: 1, marginBottom: '2rem' }}>{job.description}</p>
+                  <button className="btn-primary" style={{ width: '100%' }}>Apply Now !</button>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>

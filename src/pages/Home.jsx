@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView, useSpring, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
@@ -8,10 +8,31 @@ import Testimonials from '../components/Testimonials';
 import FAQ from '../components/FAQ';
 import '../pages/About.css';
 
+const Counter = ({ value, suffix = "" }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const springValue = useSpring(0, { stiffness: 100, damping: 30 });
+  const displayValue = useTransform(springValue, (v) => Math.floor(v).toLocaleString() + suffix);
+
+  useEffect(() => {
+    if (isInView) {
+      springValue.set(value);
+    }
+  }, [isInView, value, springValue]);
+
+  return <motion.span ref={ref}>{displayValue}</motion.span>;
+};
+
 const Home = () => {
   const revealsRef = useRef([]);
 
   useEffect(() => {
+    document.title = "SpareSpace — Book Studio Spaces in South India";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', "Book premium studio spaces, film sets, and creative venues in South India. Instant online booking via SpareSpace.");
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((e, i) => {
         if (e.isIntersecting) {
@@ -38,31 +59,24 @@ const Home = () => {
       {/* ── Hero Section ── */}
       <Hero />
 
-      {/* ── Features Section ── */}
-      <Features />
-
-      {/* ── Marquee Strip ── */}
-      <Marquee />
-
       {/* ── About / Story Section (formerly About page) ── */}
-      <div className="about-page" style={{ paddingTop: 0 }}>
-
+      <div className="about-page" style={{ paddingTop: '2rem' }}>
         {/* Story Section */}
         <section className="about-story" id="story">
           <div className="about-story-sidebar about-reveal" ref={addToRefs}>
             <div className="about-sidebar-label">By the Numbers</div>
             <div className="about-sidebar-stat">
-              <div className="about-stat-num">200+</div>
+              <div className="about-stat-num"><Counter value={200} suffix="+" /></div>
               <div className="about-stat-label">Productions Completed</div>
             </div>
             <div className="about-sidebar-divider"></div>
             <div className="about-sidebar-stat">
-              <div className="about-stat-num">85+</div>
+              <div className="about-stat-num"><Counter value={85} suffix="+" /></div>
               <div className="about-stat-label">Unique Locations Scouted</div>
             </div>
             <div className="about-sidebar-divider"></div>
             <div className="about-sidebar-stat">
-              <div className="about-stat-num">6</div>
+              <div className="about-stat-num"><Counter value={6} /></div>
               <div className="about-stat-label">Cities, One Vision</div>
             </div>
           </div>
@@ -167,6 +181,12 @@ const Home = () => {
           <Link to="/list-space" className="about-cta-btn">Get in Touch</Link>
         </section>
       </div>
+
+      {/* ── Features Section ── */}
+      <Features />
+
+      {/* ── Marquee Strip ── */}
+      <Marquee />
 
       {/* ── Testimonials ── */}
       <Testimonials />

@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PageHeader from '../components/PageHeader';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 const Contact = () => {
+  useEffect(() => {
+    document.title = "Contact SpareSpace | Partner With Us";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', "Contact SpareSpace for booking inquiries, venue partnerships, or support. We're here to help you find the perfect creative space.");
+    }
+  }, []);
   return (
     <div className="page-wrapper">
       <PageHeader title="Contact Us" subtitle="We're here to help. Reach out to our team." />

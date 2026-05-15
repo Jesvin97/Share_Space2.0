@@ -1,0 +1,19 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Control AI Crawlers
+User-agent: anthropic-ai
+User-agent: CCBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: cohere-ai
+User-agent: DuckAssistBot
+User-agent: GPTBot
+User-agent: Meta-ExternalAgent
+User-agent: OAI-SearchBot
+User-agent: Quora-Bot
+Disallow: /
+
+Sitemap: https://share-space2-0.vercel.app/sitemap.xml

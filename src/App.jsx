@@ -11,6 +11,7 @@ import Contact from './pages/Contact';
 import ListSpace from './pages/ListSpace';
 import Spaces from './pages/Spaces';
 import Blogs from './pages/Blogs';
+import SpaceDetail from './pages/SpaceDetail';
 import ScrollToTop from './components/ScrollToTop';
 import ChatWindow from './components/Chatbot/ChatWindow';
 
@@ -40,6 +41,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/spaces" element={<Spaces />} />
+          <Route path="/spaces/:id" element={<SpaceDetail />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/about" element={<Navigate to="/" replace />} />
           <Route path="/careers" element={<Careers />} />
