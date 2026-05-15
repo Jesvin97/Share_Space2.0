@@ -1,10 +1,9 @@
-// api/spaces/[id].js — DELETE /api/spaces/:id (admin only)
 import { initDb, sql } from '../_lib/db.js';
-import { requireAdmin } from '../_lib/auth.js';
 import { applySecurityHeaders } from '../_lib/headers.js';
 
-async function handler(req, res) {
+export default async function handler(req, res) {
   applySecurityHeaders(res);
+  await initDb();
 
   const { id } = req.query;
   const spaceId = parseInt(id, 10);
@@ -13,7 +12,7 @@ async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid space ID.' });
   }
 
-  // ── DELETE: admin removes a listing ─────────────────────────────────────
+  // ── DELETE: removes a listing (Now Public) ─────────────────────────────────────
   if (req.method === 'DELETE') {
     const result = await sql`DELETE FROM spaces WHERE id = ${spaceId} RETURNING id`;
     if (result.rows.length === 0) {
@@ -22,7 +21,7 @@ async function handler(req, res) {
     return res.status(200).json({ message: 'Space deleted successfully.' });
   }
 
-  // ── PUT: admin updates a listing ─────────────────────────────────────────
+  // ── PUT: updates a listing (Now Public) ─────────────────────────────────────────
   if (req.method === 'PUT') {
     const { sanitizeBody } = await import('../_lib/sanitize.js');
     const clean = sanitizeBody(req.body, {
@@ -57,6 +56,3 @@ async function handler(req, res) {
 
   return res.status(405).json({ error: 'Method not allowed.' });
 }
-
-// Require admin JWT for all operations on this route
-export default requireAdmin(handler);

@@ -1,7 +1,12 @@
-# Project Context: Share Space 2.0
-
 ## Project Memory
-Share Space 2.0 is a premium platform designed for discovering and listing diverse spaces (coworking, events, creative studios). It focuses on a high-end user experience with smooth interactions, minimalist design, and robust content management via an integrated blog system and admin portal.
+Share Space 2.0 is a **premium discovery and listing platform** focused on high-end, diverse spaces in **South India**. The niche covers curated coworking hubs, event venues, and creative studios.
+
+The platform tells a story of seamless connectivity and premium aesthetics, bridging property owners and creative professionals through a minimalist, motion-rich interface.
+
+### Niche & Engagement
+- **Market**: Premium spaces in South India (Coworking, Studios, Events).
+- **Selling Point**: Curated, high-end user experience with smooth interactions.
+- **Contact**: Primary engagement for owners is via direct **WhatsApp Web integration** for instant listing onboarding.
 
 ## Tech Stack
 - **Frontend**: 

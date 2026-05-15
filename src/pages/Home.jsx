@@ -5,6 +5,7 @@ import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Marquee from '../components/Marquee';
 import Testimonials from '../components/Testimonials';
+import FAQ from '../components/FAQ';
 import '../pages/About.css';
 
 const Home = () => {
@@ -169,6 +170,9 @@ const Home = () => {
 
       {/* ── Testimonials ── */}
       <Testimonials />
+
+      {/* ── FAQ ── */}
+      <FAQ />
     </main>
   );
 };

@@ -22,10 +22,17 @@
   - `rateLimit.js`: Protection against API abuse.
   - `sanitize.js`: Input cleaning to prevent XSS/Injection.
 
-### 3. Data Layer (PostgreSQL)
-- **Hosted**: Vercel Postgres.
-- **Schema**: Managed via SQL queries within serverless functions.
-- **Persistence**: Relational storage for users, spaces, blogs, and admin configurations.
+### 3. AI Chatbot System (RAG Architecture)
+- **Model**: OpenAI `gpt-4o-mini` (Chat) and `text-embedding-3-small` (Embeddings).
+- **Knowledge Base**: PDF-based text extraction and semantic chunking.
+- **Vector Storage**: Lightweight semantic retrieval using cosine similarity.
+- **Cache & Rate Limit**: Upstash Redis (Sliding window rate limiting and semantic response caching).
+- **Security**: Prompt injection protection and system prompt leakage prevention.
+
+### 4. Data Layer (PostgreSQL & Redis)
+- **Primary DB**: Vercel Postgres for users, spaces, and blogs.
+- **Caching/State**: Upstash Redis for chatbot rate limits, cost tracking, and response caching.
+- **Persistence**: Relational storage for platform data.
 
 ## Data Flow
 1. **User Interaction**: User clicks a button or loads a page.

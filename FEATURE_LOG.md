@@ -1,5 +1,13 @@
 # Feature Log: Share Space 2.0
 
+## [Planned] AI Chatbot System (Production-Ready)
+- **Feature**: Integrated AI Assistant with RAG architecture.
+  - PDF Ingestion (3-page knowledge base).
+  - OpenAI GPT-4o-mini for streaming responses.
+  - Upstash Redis for semantic caching and IP-based rate limiting.
+  - Real-time cost tracking with a $1 threshold auto-disable.
+  - Security measures against prompt injection and leakage.
+
 ## [2026-05-12] Role-Based Access Control (RBAC)
 - **Feature**: Implemented "Auth0-style" role management.
   - Defined 3 master admin emails (`admin@shrshape.com`, `jesvin@shrshape.com`, `manager@shrshape.com`) with full edit/modify/delete rights.

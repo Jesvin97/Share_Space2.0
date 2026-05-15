@@ -1,24 +1,11 @@
 // api/_lib/db.js — Database layer using @vercel/postgres
-// Handles schema init and all data access with parameterized queries (OWASP A03).
 import { sql } from '@vercel/postgres';
-import bcrypt from 'bcryptjs';
 
 /**
  * Initialize tables and seed default data on first run.
  * Call this at the top of any API route that needs the DB.
  */
 export async function initDb() {
-  // Create users table
-  await sql`
-    CREATE TABLE IF NOT EXISTS users (
-      id        SERIAL PRIMARY KEY,
-      email     VARCHAR(255) UNIQUE NOT NULL,
-      password_hash VARCHAR(255) NOT NULL,
-      role      VARCHAR(50) NOT NULL DEFAULT 'user',
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )
-  `;
-
   // Create spaces table
   await sql`
     CREATE TABLE IF NOT EXISTS spaces (
@@ -40,7 +27,7 @@ export async function initDb() {
       title          VARCHAR(255) NOT NULL,
       slug           VARCHAR(255) UNIQUE NOT NULL,
       content        TEXT NOT NULL,
-      category       VARCHAR(50) NOT NULL, -- SEO, AEO, LLMSEO, GEO
+      category       VARCHAR(50) NOT NULL,
       image_url      TEXT,
       summary_tldr   TEXT,
       structured_data JSONB,
@@ -48,18 +35,6 @@ export async function initDb() {
       created_at     TIMESTAMPTZ DEFAULT NOW()
     )
   `;
-
-  // Seed admin user if not exists
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@shrshape.com';
-  const adminPass  = process.env.ADMIN_PASSWORD || 'admin12345#@';
-  const existing = await sql`SELECT id FROM users WHERE email = ${adminEmail} LIMIT 1`;
-  if (existing.rows.length === 0) {
-    const hash = await bcrypt.hash(adminPass, 12);
-    await sql`
-      INSERT INTO users (email, password_hash, role)
-      VALUES (${adminEmail}, ${hash}, 'admin')
-    `;
-  }
 
   // Seed default spaces if table is empty
   const spaceCount = await sql`SELECT COUNT(*) FROM spaces`;

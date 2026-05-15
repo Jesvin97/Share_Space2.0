@@ -1,22 +1,18 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Lenis from '@studio-freight/lenis';
-import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import About from './pages/About';
 import Careers from './pages/Careers';
 import HelpCenter from './pages/HelpCenter';
 import TrustSafety from './pages/TrustSafety';
 import Contact from './pages/Contact';
 import ListSpace from './pages/ListSpace';
-import SignIn from './pages/SignIn';
 import Spaces from './pages/Spaces';
 import Blogs from './pages/Blogs';
-import AdminDashboard from './pages/AdminDashboard';
-import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
+import ChatWindow from './components/Chatbot/ChatWindow';
 
 function App() {
   useEffect(() => {
@@ -37,35 +33,25 @@ function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <Router>
-        <ScrollToTop />
-        <div className="app">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/spaces" element={<Spaces />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/about" element={<Navigate to="/" replace />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/help" element={<HelpCenter />} />
-            <Route path="/trust" element={<TrustSafety />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/list-space" element={<ListSpace />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route 
-              path="/portal-manager" 
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
-          <Footer />
-        </div>
-      </Router>
-    </AuthProvider>
+    <Router>
+      <ScrollToTop />
+      <div className="app">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/spaces" element={<Spaces />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/about" element={<Navigate to="/" replace />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/help" element={<HelpCenter />} />
+          <Route path="/trust" element={<TrustSafety />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/list-space" element={<ListSpace />} />
+        </Routes>
+        <Footer />
+      </div>
+      <ChatWindow />
+    </Router>
   );
 }
 

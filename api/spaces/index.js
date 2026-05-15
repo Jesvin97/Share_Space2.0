@@ -2,11 +2,10 @@
 // GET  /api/spaces — public, returns all spaces
 // POST /api/spaces — admin only, add a new space
 import { initDb, sql } from '../_lib/db.js';
-import { requireAdmin } from '../_lib/auth.js';
 import { sanitizeBody } from '../_lib/sanitize.js';
 import { applySecurityHeaders } from '../_lib/headers.js';
 
-async function handler(req, res) {
+export default async function handler(req, res) {
   applySecurityHeaders(res);
   await initDb();
 
@@ -16,9 +15,8 @@ async function handler(req, res) {
     return res.status(200).json(result.rows);
   }
 
-  // ── POST: admin creates a listing ────────────────────────────────────────
+  // ── POST: create a listing (Now Public) ───────────────────────────────────
   if (req.method === 'POST') {
-    // requireAdmin is applied as HOF below
     const clean = sanitizeBody(req.body, {
       name:     'str',
       location: 'str',
@@ -44,13 +42,4 @@ async function handler(req, res) {
   }
 
   return res.status(405).json({ error: 'Method not allowed.' });
-}
-
-// Wrap POST in requireAdmin — GET is already public (no wrapper needed at route level)
-// We conditionally apply admin check inside the handler itself.
-export default async function secureHandler(req, res) {
-  if (req.method === 'POST') {
-    return requireAdmin(handler)(req, res);
-  }
-  return handler(req, res);
 }

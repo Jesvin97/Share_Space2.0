@@ -1,10 +1,8 @@
-// api/blogs/[id].js — PUT/DELETE /api/blogs/:id (admin only)
 import { initDb, sql } from '../_lib/db.js';
-import { requireAdmin } from '../_lib/auth.js';
 import { sanitizeBody } from '../_lib/sanitize.js';
 import { applySecurityHeaders } from '../_lib/headers.js';
 
-async function handler(req, res) {
+export default async function handler(req, res) {
   applySecurityHeaders(res);
   await initDb();
 
@@ -15,7 +13,7 @@ async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid blog ID.' });
   }
 
-  // ── DELETE: admin removes a blog ─────────────────────────────────────────
+  // ── DELETE: removes a blog (Now Public) ───────────────────────────────────
   if (req.method === 'DELETE') {
     const result = await sql`DELETE FROM blogs WHERE id = ${blogId} RETURNING id`;
     if (result.rows.length === 0) {
@@ -24,7 +22,7 @@ async function handler(req, res) {
     return res.status(200).json({ message: 'Blog deleted successfully.' });
   }
 
-  // ── PUT: admin updates a blog ────────────────────────────────────────────
+  // ── PUT: updates a blog (Now Public) ──────────────────────────────────────
   if (req.method === 'PUT') {
     const clean = sanitizeBody(req.body, {
       title:          'str',
@@ -69,5 +67,3 @@ async function handler(req, res) {
 
   return res.status(405).json({ error: 'Method not allowed.' });
 }
-
-export default requireAdmin(handler);

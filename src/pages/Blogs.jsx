@@ -1,24 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PageHeader from '../components/PageHeader';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Tag, ChevronRight, Search, Filter } from 'lucide-react';
+import { Calendar, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { client, urlFor } from '../lib/sanity';
+
+const BLOGS_QUERY = `*[_type == "post"] | order(publishedAt desc) {
+  _id, title, "slug": slug.current, category, summary, coverImage, publishedAt
+}`;
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/blogs')
-      .then(res => res.json())
-      .then(data => {
-        setBlogs(Array.isArray(data) ? data : []);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to fetch blogs:', err);
-        setLoading(false);
-      });
+    client.fetch(BLOGS_QUERY)
+      .then(data => { setBlogs(Array.isArray(data) ? data : []); setLoading(false); })
+      .catch(err => { console.error('Sanity blogs fetch error:', err); setLoading(false); });
   }, []);
 
   return (
@@ -46,7 +44,7 @@ const Blogs = () => {
               <AnimatePresence mode='popLayout'>
                 {blogs.map(blog => (
                   <motion.article
-                    key={blog.id}
+                    key={blog._id}
                     layout
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -65,23 +63,16 @@ const Blogs = () => {
                   >
                     <div style={{ height: '220px', overflow: 'hidden', position: 'relative' }}>
                       <img 
-                        src={blog.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=800'} 
+                        src={blog.coverImage ? urlFor(blog.coverImage).width(800).height(440).url() : 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=800'} 
                         alt={blog.title}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                       <div style={{ 
-                        position: 'absolute', 
-                        top: '1rem', 
-                        left: '1rem',
-                        background: 'rgba(0,0,0,0.6)',
-                        backdropFilter: 'blur(4px)',
-                        padding: '0.25rem 0.75rem',
-                        borderRadius: '100px',
-                        fontSize: '0.75rem',
-                        fontWeight: '700',
-                        color: 'var(--primary)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
+                        position: 'absolute', top: '1rem', left: '1rem',
+                        background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+                        padding: '0.25rem 0.75rem', borderRadius: '100px',
+                        fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary)',
+                        textTransform: 'uppercase', letterSpacing: '0.05em',
                         border: '1px solid rgba(212,175,55,0.3)'
                       }}>
                         {blog.category}
@@ -91,36 +82,27 @@ const Blogs = () => {
                     <div style={{ padding: '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '1rem' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                          <Calendar size={14} /> {new Date(blog.created_at).toLocaleDateString()}
+                          <Calendar size={14} /> {blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : '—'}
                         </span>
                       </div>
                       
                       <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', lineHeight: '1.4' }}>{blog.title}</h3>
                       
                       <p style={{ 
-                        color: 'var(--text-muted)', 
-                        fontSize: '0.95rem', 
-                        lineHeight: '1.6',
-                        marginBottom: '1.5rem',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden'
+                        color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.6',
+                        marginBottom: '1.5rem', display: '-webkit-box',
+                        WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden'
                       }}>
-                        {blog.summary_tldr || blog.content}
+                        {blog.summary}
                       </p>
 
                       <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Link 
-                          to={`/blogs/${blog.slug}`} 
+                          to={`/blogs/${blog.slug}`}
                           style={{ 
-                            color: 'var(--primary)', 
-                            textDecoration: 'none', 
-                            fontSize: '0.9rem', 
-                            fontWeight: '600',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.25rem'
+                            color: 'var(--primary)', textDecoration: 'none',
+                            fontSize: '0.9rem', fontWeight: '600',
+                            display: 'flex', alignItems: 'center', gap: '0.25rem'
                           }}
                         >
                           Read More <ChevronRight size={16} />

@@ -1,12 +1,8 @@
-// api/blogs/index.js
-// GET  /api/blogs — public, returns all blogs
-// POST /api/blogs — admin only, add a new blog
 import { initDb, sql } from '../_lib/db.js';
-import { requireAdmin } from '../_lib/auth.js';
 import { sanitizeBody } from '../_lib/sanitize.js';
 import { applySecurityHeaders } from '../_lib/headers.js';
 
-async function handler(req, res) {
+export default async function handler(req, res) {
   applySecurityHeaders(res);
   await initDb();
 
@@ -16,7 +12,7 @@ async function handler(req, res) {
     return res.status(200).json(result.rows);
   }
 
-  // ── POST: admin creates a blog ───────────────────────────────────────────
+  // ── POST: create a blog (Now Public) ─────────────────────────────────────
   if (req.method === 'POST') {
     const clean = sanitizeBody(req.body, {
       title:          'str',
@@ -49,11 +45,4 @@ async function handler(req, res) {
   }
 
   return res.status(405).json({ error: 'Method not allowed.' });
-}
-
-export default async function secureHandler(req, res) {
-  if (req.method === 'POST') {
-    return requireAdmin(handler)(req, res);
-  }
-  return handler(req, res);
 }

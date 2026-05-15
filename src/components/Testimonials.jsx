@@ -1,30 +1,23 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
+import { client, urlFor } from '../lib/sanity';
 import './Testimonials.css';
 
-const testimonials = [
-  {
-    name: 'Nandika K.',
-    role: 'Chief Marketing Officer',
-    text: "As a marketing agency, we're always hunting for fresh shoot spaces. Spare Space makes it easy with plenty of diverse and styled options. It's been a game-changer.",
-    rating: 5
-  },
-  {
-    name: 'Arsheya O.',
-    role: 'Founder & CEO',
-    text: "We were looking for a large industrial setup, but our search led nowhere. Even with our highly specific requirements, Spare Space helped us find the perfect location effortlessly!",
-    rating: 5
-  },
-  {
-    name: 'Puneet K.',
-    role: 'Event Director',
-    text: "We manage events for a lot of corporates and brands, so finding spaces to host them quickly is key. Spare Space has helped us find amazing venues hassle-free.",
-    rating: 5
-  }
-];
+const QUERY = `*[_type == "testimonial"] | order(order asc) {
+  _id, name, role, text, rating, avatar
+}`;
 
 const Testimonials = () => {
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    client.fetch(QUERY)
+      .then(data => { setTestimonials(data); setLoading(false); })
+      .catch(err => { console.error('Sanity fetch error:', err); setLoading(false); });
+  }, []);
+
   return (
     <section className="section testimonials-section" id="about">
       {/* Diorama layered noise/texture specific to this section */}
@@ -42,10 +35,15 @@ const Testimonials = () => {
           <p className="section-subtitle">What Our Community Loves About Us</p>
         </motion.div>
         
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>Loading testimonials...</div>
+        ) : testimonials.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>No testimonials yet.</div>
+        ) : (
         <div className="testimonials-grid">
           {testimonials.map((t, index) => (
             <motion.div 
-              key={index}
+              key={t._id}
               className="testimonial-card glass"
               /* Organic Diorma entrance: cards float in from deep Z, slightly rotated */
               initial={{ opacity: 0, scale: 0.85, rotateZ: index % 2 === 0 ? -2 : 2, z: -150, y: 50 }}
@@ -61,14 +59,18 @@ const Testimonials = () => {
               }}
             >
               <div className="stars" style={{ transform: "translateZ(20px)" }}>
-                {[...Array(t.rating)].map((_, i) => (
+                {[...Array(t.rating || 5)].map((_, i) => (
                   <Star key={i} size={16} fill="var(--primary)" color="var(--primary)" />
                 ))}
               </div>
               <p className="testimonial-text" style={{ transform: "translateZ(30px)" }}>"{t.text}"</p>
               
               <div className="testimonial-author" style={{ transform: "translateZ(40px)" }}>
-                <div className="author-avatar">{t.name.charAt(0)}</div>
+                {t.avatar ? (
+                  <img src={urlFor(t.avatar).width(48).height(48).url()} alt={t.name} className="author-avatar" style={{ objectFit: 'cover' }} />
+                ) : (
+                  <div className="author-avatar">{t.name?.charAt(0)}</div>
+                )}
                 <div>
                   <h4>{t.name}</h4>
                   <span>{t.role}</span>
@@ -77,6 +79,7 @@ const Testimonials = () => {
             </motion.div>
           ))}
         </div>
+        )}
       </div>
     </section>
   );
