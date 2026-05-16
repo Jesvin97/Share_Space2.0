@@ -69,7 +69,7 @@ const Pill = ({ active, onClick, children }) => (
     style={{
       padding: '0.45rem 1.1rem',
       borderRadius: '100px',
-      border: `1px solid ${active ? 'var(--primary)' : 'rgba(255,255,255,0.1)'}`,
+      border: `1px solid ${active ? 'var(--primary)' : 'var(--border)'}`,
       background: active ? 'rgba(212,175,55,0.18)' : 'transparent',
       color: active ? 'var(--primary)' : 'var(--text-muted)',
       fontWeight: active ? '700' : '500',
@@ -138,7 +138,7 @@ const Spaces = () => {
       <PageHeader title="Discover Spaces" subtitle="Find the perfect studios and event venues across South India for your next creative project." />
 
       {/* ── Filter Bar ── */}
-      <div style={{ background: 'var(--surface)', borderBottom: '1px solid rgba(255,255,255,0.04)', padding: '1rem 0', position: 'sticky', top: '70px', zIndex: 100 }}>
+      <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '1rem 0', position: 'sticky', top: '70px', zIndex: 100 }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           <SlidersHorizontal size={15} color="var(--primary)" style={{ flexShrink: 0 }} />
 

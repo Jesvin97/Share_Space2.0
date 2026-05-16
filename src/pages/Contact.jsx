@@ -32,9 +32,9 @@ const Contact = () => {
           </div>
           <div className="glass" style={{ padding: '2rem', borderRadius: 'var(--radius-md)' }}>
              <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-               <input type="text" placeholder="Your Name" style={{ padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontFamily: 'inherit' }} />
-               <input type="email" placeholder="Your Email" style={{ padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontFamily: 'inherit' }} />
-               <textarea placeholder="Your Message" rows="5" style={{ padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontFamily: 'inherit', resize: 'vertical' }}></textarea>
+               <input type="text" placeholder="Your Name" />
+               <input type="email" placeholder="Your Email" />
+               <textarea placeholder="Your Message" rows="5"></textarea>
                <button type="button" className="btn-primary" style={{ alignSelf: 'flex-start' }}>Send Message</button>
              </form>
           </div>

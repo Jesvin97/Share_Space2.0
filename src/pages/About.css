@@ -225,8 +225,8 @@
   color: var(--rust); 
 }
 .about-story-body p {
-  font-size: 1.1rem; 
-  line-height: 1.9;
+  font-size: 1rem; 
+  line-height: 1.8;
   color: var(--ink); 
   margin-bottom: 1.5rem; 
   max-width: 680px;
@@ -352,8 +352,8 @@
   color: var(--rust); 
 }
 .about-philosophy-text p {
-  font-size: 1.1rem; 
-  line-height: 1.9;
+  font-size: 1rem; 
+  line-height: 1.8;
   color: var(--ink); 
   margin-bottom: 1.5rem;
 }

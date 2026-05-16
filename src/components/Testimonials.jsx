@@ -31,7 +31,7 @@ const Testimonials = () => {
            transition={{ duration: 0.8 }}
            style={{ transformStyle: "preserve-3d" }}
         >
-          <h2 className="section-title" style={{ textShadow: '0 10px 30px rgba(0,0,0,0.8)' }}>Our Users Feedback</h2>
+          <h2 className="section-title">Our Users Feedback</h2>
           <p className="section-subtitle">What Our Community Loves About Us</p>
         </motion.div>
         
